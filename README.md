@@ -2,7 +2,7 @@
 
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) bundle that makes the agent answer in two tracks: **text carries the conclusion and the reasoning, visuals carry structure, comparison, process and data**.
 
-It registers one static system-prompt section. Nothing else: no tools, no UI, no dependencies, no network.
+It registers one static system-prompt section, no tools, no UI, no dependencies, no network.
 
 ## What it tells the model
 
@@ -20,7 +20,7 @@ The default text is Chinese (the contract was written for Chinese replies); set 
 
 ## Install
 
-The bundle is a normal package with a `dsh.bundle.patch`; install it into a DeepSeek Harness profile.
+The bundle is a normal package with a `dsh.bundle.patch` install it into a DeepSeek Harness profile.
 
 1. In **Plugin Manager**, install the bundle from the package spec `github:DingJinSun/dsh-dual-track-output` (pnpm git spec), or add it to your profile's `package.json`:
 
@@ -36,9 +36,6 @@ The bundle is a normal package with a `dsh.bundle.patch`; install it into a Deep
 
 Installed this way the package is copied into the profile, so it keeps working regardless of which workspace you open, and every session and subagent in that profile sees the section.
 
-### Install in every profile
-
-Profiles are independent: install the bundle in each profile you use (for example `desktop` and `web`). The section is profile-global, not workspace-local.
 
 ## Configure
 
@@ -82,7 +79,7 @@ In a live profile, ask a fresh agent what its system prompt says about output st
 
 ## How it works
 
-- One `ctx.systemPrompt.section()` registration inside `ctx.effect()`, so unloading or disabling the plugin removes the text.
+- One ctx.systemPrompt.section()` registration inside `ctx.effect()`, so unloading or disabling the plugin removes the text.
 - Static text with `interpolate: false`: the prompt prefix is byte-stable across requests, so it does not churn KV cache reuse.
 - The plugin declares `inject: ['systemPrompt']` and nothing else; it reads no session state and writes no files.
 
