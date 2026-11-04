@@ -38,7 +38,7 @@
 
 ### 多个 profile 各装一次
 
-profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web`）都要各装一次。这段契约是 profile 级全局的，不是工作区级的。
+profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web`）都要各装一次。
 
 ## 配置
 
@@ -48,7 +48,7 @@ profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web
 - id: dual-track-output
   name: dsh-dual-track-output
   config:
-    enabled: true          # false 即完全移除这段契约
+    enabled: true          # false 即完全移除
     language: zh           # zh | en
     order: 9000            # 提示词顺序；官方环境事实从 10000 起
     section: output:dual-track
