@@ -1,8 +1,8 @@
 # dsh-dual-track-output
 
-一个 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件包：让助手按「双轨」作答——**文字负责结论与推理，图负责结构、对比、流程与数据**。
+一个 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件包：让Agent按「双轨」作答——**文字负责结论与推理，图负责结构、对比、流程与数据**。
 
-它只做一件事：往系统提示词里注册一条静态段落。不含工具、不含界面、没有依赖、不联网。
+它只做一件事：给予系统一个提示词。不含工具、不含界面、没有依赖、不联网。
 
 ## 它对模型提了什么要求
 
