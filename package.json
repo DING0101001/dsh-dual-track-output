@@ -1,0 +1,53 @@
+{
+  "name": "dsh-dual-track-output",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Dual-track output for DeepSeek Harness: text carries the conclusion, visuals carry structure, comparison, process and data.",
+  "license": "MIT",
+  "author": {
+    "name": "DING",
+    "url": "https://github.com/DingJinSun"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "system-prompt",
+    "output-style",
+    "visualization"
+  ],
+  "engines": {
+    "dsh": ">=0.2.0-rc.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DingJinSun/dsh-dual-track-output.git"
+  },
+  "homepage": "https://github.com/DingJinSun/dsh-dual-track-output#readme",
+  "bugs": {
+    "url": "https://github.com/DingJinSun/dsh-dual-track-output/issues"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "scripts/*.mjs"
+  ],
+  "scripts": {
+    "test": "node scripts/render-check.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

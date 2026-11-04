@@ -1,0 +1,8 @@
+# Dual-track output rules for the model-facing system prompt.
+# Every field below can be overridden from the profile's own cordis.patch.yml;
+# an override entry replaces this complete config, so repeat the fields you keep.
+- insert:
+    - id: dual-track-output
+      name: dsh-dual-track-output
+      config:
+        enabled: true

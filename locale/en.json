@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Dual-Track Output (Text + Visuals)",
+    "description": "Adds the dual-track output contract to the system prompt: conclusion first, visuals per scenario, chart selection, HTML and Mermaid fallback rules."
+  }
+}
