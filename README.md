@@ -36,7 +36,7 @@
 
 这样安装时包会被**复制**进 profile 目录，因此与打开哪个工作区无关；该 profile 下的所有会话和子代理都能看到这段契约。
 
-### 多个 profile 各装一次
+### 多个 profile 互相独立
 
 profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web`）都要各装一次。
 
