@@ -19,7 +19,7 @@ const DEFAULT_ORDER = 9000
 const DEFAULT_SECTION = 'output:dual-track'
 
 /** Block keys, in rendering order. Each one is independently switchable. */
-const BLOCK_KEYS = ['structure', 'triggers', 'charts', 'figure', 'layout', 'html', 'fallback', 'redlines']
+const BLOCK_KEYS = ['structure', 'triggers', 'charts', 'figure', 'layout', 'geometry', 'html', 'fallback', 'redlines']
 
 const RULES = {
   zh: {
@@ -67,6 +67,13 @@ const RULES = {
 13. 一图一结论；整页配色固定为一个主色阶 + 一个对比色，禁止彩虹色板、禁止每图换色。
 14. 区块间距 40–64px，图表卡片内边距 ≥24px，背景与页面同色，不加厚边框和层叠阴影。
 15. 移动端图表容器宽度占视口 ≥65%，默认单列堆叠，不缩字号硬塞。`,
+      geometry: `### 构图几何：元素不重叠，连线落在边框上
+1. 同类元素只给「尺寸 + 最小间距」两个常量，位置循环累加推出（next = prev + size + gap），禁止逐个手写坐标——重叠就藏在某个手写的数字里。
+2. 生成后立即自检：任意两个元素间距 ≥ 设定值、文本宽度 ≤ 容器宽度；把检查写成断言或脚本，失败就报错重排，不要靠肉眼看图。
+3. 连线终点由目标框的 x/y/w/h 反推：从左侧进入取 x，从上/下进入取 y；多路汇入同一面时入点错开（1/6、1/2、5/6），禁止几条线共用一点，禁止终点落进框内。
+4. 连线不得压过边框和文字：转折放在框外，箭头尖端停在边界上。
+5. 分组底色、图例、编号等第二层结构由第一层元素算出（包围盒 + 间隙中点），不要另写一套坐标。
+6. 文本先量后放：字号与文案定下后先估宽度，超宽就换行、缩字号或改短，不允许溢出压到相邻元素。`,
       html: `### HTML 交付（用户要文件，或图需要交互时）
 - 单个自包含 HTML：内联 CSS/JS，浏览器直接打开；图表用 ECharts 等成熟库，CDN 引入。
 - 一屏一图，图题在上；主色不超过 3 种，深色文字浅底，中文排版可读。
@@ -125,6 +132,13 @@ const RULES = {
 13. One chart, one conclusion; a page keeps one primary ramp plus one accent — no rainbow palettes and no per-chart recolouring.
 14. Section spacing 40–64px, chart card padding ≥24px, background matches the page, no heavy borders or stacked shadows.
 15. On mobile the chart container is ≥65% of the viewport, single-column by default, and fonts are never shrunk to force a fit.`,
+      geometry: `### Composition geometry: no overlaps, connectors stop on borders
+1. Repeated elements get two constants only — size and minimum gap; positions follow next = prev + size + gap. Never hand-write every coordinate: an overlap hides inside one of those typed numbers.
+2. Self-check right after generation: minimum gap between any two elements ≥ the constant, and text width ≤ container width. Encode it as an assertion or script that fails loudly and re-lays out — do not rely on eyeballing the render.
+3. Derive connector endpoints from the target box's x/y/w/h: enter on the left → use x; enter from the top or bottom → use y; stagger entry points (1/6, 1/2, 5/6) when several connectors share one side. Never let several arrows land on one point, and never let an endpoint fall inside the box.
+4. Connectors must not cross a border or text: put the elbow outside the box and stop the arrowhead on the border.
+5. Second-layer structure (group backgrounds, legends, numbering) is computed from first-layer elements (bounding box plus gap midpoints), never from a second set of coordinates.
+6. Measure text before placing it: with the size and copy fixed, estimate the width first; if it overflows, wrap, shrink or shorten — never let it bleed into a neighbour.`,
       html: `### HTML delivery (the user wants a file, or the visual must be interactive)
 - One self-contained HTML file: inline CSS/JS, opens directly in a browser; charts from a mature library such as ECharts over CDN.
 - One visual per screen, title above; at most three main colors, dark text on a light background, readable CJK typography.
