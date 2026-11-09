@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": {
     "name": "DING",
-    "url": "https://github.com/DingJinSun"
+    "url": "https://github.com/DING0101001"
   },
   "keywords": [
     "dsh-plugin",
@@ -21,11 +21,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DingJinSun/dsh-dual-track-output.git"
+    "url": "git+https://github.com/DING0101001/dsh-dual-track-output.git"
   },
-  "homepage": "https://github.com/DingJinSun/dsh-dual-track-output#readme",
+  "homepage": "https://github.com/DING0101001/dsh-dual-track-output#readme",
   "bugs": {
-    "url": "https://github.com/DingJinSun/dsh-dual-track-output/issues"
+    "url": "https://github.com/DING0101001/dsh-dual-track-output/issues"
   },
   "exports": {
     ".": "./index.js",

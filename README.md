@@ -26,11 +26,11 @@
 
 这是一个带 `dsh.bundle.patch` 的普通包，装进 DeepSeek Harness 的 **profile** 即可。
 
-1. 在 **Plugin Manager** 里用包规格 `github:DingJinSun/dsh-dual-track-output` 安装（pnpm 的 git 规格），或直接写进 profile 的 `package.json`：
+1. 在 **Plugin Manager** 里用包规格 `github:DING0101001/dsh-dual-track-output` 安装（pnpm 的 git 规格），或直接写进 profile 的 `package.json`：
 
    ```json
    {
-     "dependencies": { "dsh-dual-track-output": "github:DingJinSun/dsh-dual-track-output" },
+     "dependencies": { "dsh-dual-track-output": "github:DING0101001/dsh-dual-track-output" },
      "dsh": { "profile": { "bundles": ["dsh-dual-track-output"] } }
    }
    ```
