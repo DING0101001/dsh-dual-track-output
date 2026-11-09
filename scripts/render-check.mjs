@@ -8,22 +8,27 @@ for (const heading of [
   '### 必须出图的场景（命中其一即出图）',
   '### 图表选型',
   '### 每张图的硬性要求',
+  '### 图表尺寸与图文排版（硬性指标，违反即返工）',
   '### HTML 交付（用户要文件，或图需要交互时）',
   '### 降级（环境不能渲染图表时）',
   '### 红线',
 ]) {
   assert.ok(zh.includes(heading), `zh block missing: ${heading}`)
 }
+assert.ok(zh.includes('containLabel: true'), 'zh layout block keeps the grid rule')
+assert.ok(zh.includes('图表高度 min(60vh, 520px)'), 'zh layout block keeps the height rule')
 assert.ok(zh.trimEnd().endsWith('- 一句话能说清的不配图。'), 'zh ends with the last red line')
 
-const trimmed = renderSection({ blocks: { html: false, fallback: false } })
+const trimmed = renderSection({ blocks: { html: false, fallback: false, layout: false } })
 assert.ok(!trimmed.includes('### HTML 交付'), 'html block can be switched off')
 assert.ok(!trimmed.includes('### 降级'), 'fallback block can be switched off')
+assert.ok(!trimmed.includes('### 图表尺寸与图文排版'), 'layout block can be switched off')
 assert.ok(trimmed.includes('### 红线'), 'remaining blocks stay')
 
 const en = renderSection({ language: 'en' })
 assert.match(en, /^## Output style: dual-track \(text \+ visuals\)/, 'en title')
 assert.ok(en.includes('### Structure and order'), 'en block')
+assert.ok(en.includes('### Chart sizing and typography (hard limits; rework if violated)'), 'en layout block')
 
 const appended = renderSection({ append: 'Use the team template.' })
 assert.ok(appended.trimEnd().endsWith('Use the team template.'), 'append goes last')

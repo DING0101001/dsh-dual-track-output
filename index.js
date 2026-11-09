@@ -19,7 +19,7 @@ const DEFAULT_ORDER = 9000
 const DEFAULT_SECTION = 'output:dual-track'
 
 /** Block keys, in rendering order. Each one is independently switchable. */
-const BLOCK_KEYS = ['structure', 'triggers', 'charts', 'figure', 'html', 'fallback', 'redlines']
+const BLOCK_KEYS = ['structure', 'triggers', 'charts', 'figure', 'layout', 'html', 'fallback', 'redlines']
 
 const RULES = {
   zh: {
@@ -46,6 +46,27 @@ const RULES = {
 - 图题在上，图例、坐标轴与口径说明齐全。
 - 宽度自适应；图中数据必须与正文一致。
 - 没有真实数据时显式标注「示意/假设数据」，禁止编造精确数值。`,
+      layout: `### 图表尺寸与图文排版（硬性指标，违反即返工）
+**尺寸底线**
+1. 每个图表容器占满内容区整行宽度，禁止放进多列卡片栅格；两图并排时每张渲染宽度须 ≥520px，不足则改为上下单列。
+2. 内容区宽度 1100–1280px（窄屏自适应），图表占满整个内容区，不得再套一层窄容器。
+3. 图表高度 min(60vh, 520px)，且不低于 360px；纵轴类别 >6 项时按每项 ≥48px 加高。
+4. 图表必须由 ECharts 渲染，禁止用手写 SVG 或小 canvas 充当数据图表。
+5. 容器尺寸变化必须重绘（ResizeObserver 或 window resize 监听 chart.resize()），禁止拉伸位图。
+
+**图内可读性**
+6. 轴标签、图例、提示框字号 ≥13px；图表标题 16–18px；数值标注 13px 加粗。
+7. grid 用 containLabel: true，left/right 按最长标签预留（长标签 ≥6 字时 left 留 18%–25%）。
+8. 类别 >8 项改横向条形图；竖排长标签旋转 30°–45° 或隔项显示，禁止压成竖排单字。
+9. 图例置于图顶左侧，不压数据区；除网格线外不显示装饰线条。
+
+**图文搭配**
+10. 区块顺序固定：结论段（3–5 句）→ 图表（独占整行）→ 读图要点（1–2 句）；说明文字不与图表左右并列挤压。
+11. 图表标题写结论，不写「XX图表」（例：「直营渠道成本是加盟的 3 倍」，不是「渠道成本对比图」）。
+12. 图内只标关键数值（最大/最小/目标/异常），不逐点标注；文字不复述图内已有标签。
+13. 一图一结论；整页配色固定为一个主色阶 + 一个对比色，禁止彩虹色板、禁止每图换色。
+14. 区块间距 40–64px，图表卡片内边距 ≥24px，背景与页面同色，不加厚边框和层叠阴影。
+15. 移动端图表容器宽度占视口 ≥65%，默认单列堆叠，不缩字号硬塞。`,
       html: `### HTML 交付（用户要文件，或图需要交互时）
 - 单个自包含 HTML：内联 CSS/JS，浏览器直接打开；图表用 ECharts 等成熟库，CDN 引入。
 - 一屏一图，图题在上；主色不超过 3 种，深色文字浅底，中文排版可读。
@@ -83,6 +104,27 @@ const RULES = {
 - Carry its title above, plus legend, axes and a stated basis or measure.
 - Be width-responsive, with figures that match the numbers in the text.
 - Mark assumed or illustrative data explicitly when no real data exists; never invent precise values.`,
+      layout: `### Chart sizing and typography (hard limits; rework if violated)
+**Size floor**
+1. Every chart container spans the full content row; never place it inside a multi-column card grid. Two charts side by side must each render ≥520px wide, otherwise stack them in one column.
+2. The content area is 1100–1280px wide (fluid on narrow screens); charts fill the whole content area, with no extra narrow wrapper.
+3. Chart height is min(60vh, 520px) and never below 360px; past 6 axis categories, grow by at least 48px per category.
+4. Data charts must be rendered by ECharts; hand-written SVG or small canvases are not acceptable.
+5. Redraw on container resize (ResizeObserver, or window resize calling chart.resize()); never scale a bitmap.
+
+**Readability inside the chart**
+6. Axis labels, legend and tooltip text ≥13px; chart title 16–18px; value labels 13px bold.
+7. Use containLabel: true in the grid and reserve left/right for the longest label (18%–25% on the left once labels reach 6+ characters).
+8. Past 8 categories switch to a horizontal bar chart; rotate long labels 30°–45° or show every other one — never squeeze them into vertical characters.
+9. Legend sits at the top left, clear of the plot area; no decorative lines beyond the grid.
+
+**Text and figure together**
+10. Fixed block order: conclusion paragraph (3–5 sentences) → chart (full row) → 1–2 sentences on what to read. Prose never squeezes beside a chart.
+11. The chart title states the conclusion ("Direct-channel cost is 3× the franchise channel"), never "Channel cost comparison chart".
+12. Label only the key values (max/min/target/outlier), not every point; the text does not restate labels already in the chart.
+13. One chart, one conclusion; a page keeps one primary ramp plus one accent — no rainbow palettes and no per-chart recolouring.
+14. Section spacing 40–64px, chart card padding ≥24px, background matches the page, no heavy borders or stacked shadows.
+15. On mobile the chart container is ≥65% of the viewport, single-column by default, and fonts are never shrunk to force a fit.`,
       html: `### HTML delivery (the user wants a file, or the visual must be interactive)
 - One self-contained HTML file: inline CSS/JS, opens directly in a browser; charts from a mature library such as ECharts over CDN.
 - One visual per screen, title above; at most three main colors, dark text on a light background, readable CJK typography.
