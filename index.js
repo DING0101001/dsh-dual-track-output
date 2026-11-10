@@ -66,7 +66,13 @@ const RULES = {
 12. 图内只标关键数值（最大/最小/目标/异常），不逐点标注；文字不复述图内已有标签。
 13. 一图一结论；整页配色固定为一个主色阶 + 一个对比色，禁止彩虹色板、禁止每图换色。
 14. 区块间距 40–64px，图表卡片内边距 ≥24px，背景与页面同色，不加厚边框和层叠阴影。
-15. 移动端图表容器宽度占视口 ≥65%，默认单列堆叠，不缩字号硬塞。`,
+15. 移动端图表容器宽度占视口 ≥65%，默认单列堆叠，不缩字号硬塞。
+
+**图片呈现（等比例放大到正文列宽）**
+16. 图在正文里按容器宽度 100% 显示，左右边缘与正文文字对齐；禁止设更小的 max-width、禁止居中留白、禁止左右再垫内边距。
+17. 高度按原始宽高比自动计算（height: auto），禁止写死 height、禁止 object-fit: cover 裁切、禁止单向拉伸——只允许整体等比例缩放。
+18. 位图像素按目标显示宽度的 2 倍导出（列宽 1280px 就出 ≥2560px 宽），放大后不糊；HTML 里写 width:100%; height:auto; max-width:100%。
+19. 图内字号、线宽、间距随整体缩放同步变化：放大是"把整张图放大"，不是只把画布加宽。`,
       geometry: `### 构图几何：元素不重叠，连线落在边框上
 1. 同类元素只给「尺寸 + 最小间距」两个常量，位置循环累加推出（next = prev + size + gap），禁止逐个手写坐标——重叠就藏在某个手写的数字里。
 2. 生成后立即自检：任意两个元素间距 ≥ 设定值、文本宽度 ≤ 容器宽度；把检查写成断言或脚本，失败就报错重排，不要靠肉眼看图。
@@ -131,7 +137,13 @@ const RULES = {
 12. Label only the key values (max/min/target/outlier), not every point; the text does not restate labels already in the chart.
 13. One chart, one conclusion; a page keeps one primary ramp plus one accent — no rainbow palettes and no per-chart recolouring.
 14. Section spacing 40–64px, chart card padding ≥24px, background matches the page, no heavy borders or stacked shadows.
-15. On mobile the chart container is ≥65% of the viewport, single-column by default, and fonts are never shrunk to force a fit.`,
+15. On mobile the chart container is ≥65% of the viewport, single-column by default, and fonts are never shrunk to force a fit.
+
+**Image presentation (scale up to the text column)**
+16. In the body a figure renders at 100% of the container width, with its edges aligned to the text; no smaller max-width, no centring with empty gutters, no extra horizontal padding.
+17. Height follows the intrinsic aspect ratio (height: auto): never hard-code height, never crop with object-fit: cover, never stretch one axis — only uniform, proportional scaling.
+18. Export bitmaps at 2× the target display width (a 1280px column needs ≥2560px of pixels) so scaling up stays sharp; in HTML write width:100%; height:auto; max-width:100%.
+19. Type size, stroke width and spacing scale with the figure as a whole: enlarging means scaling the whole figure, not just widening the canvas.`,
       geometry: `### Composition geometry: no overlaps, connectors stop on borders
 1. Repeated elements get two constants only — size and minimum gap; positions follow next = prev + size + gap. Never hand-write every coordinate: an overlap hides inside one of those typed numbers.
 2. Self-check right after generation: minimum gap between any two elements ≥ the constant, and text width ≤ container width. Encode it as an assertion or script that fails loudly and re-lays out — do not rely on eyeballing the render.

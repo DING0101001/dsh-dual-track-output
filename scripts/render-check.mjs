@@ -18,6 +18,8 @@ for (const heading of [
 }
 assert.ok(zh.includes('containLabel: true'), 'zh layout block keeps the grid rule')
 assert.ok(zh.includes('图表高度 min(60vh, 520px)'), 'zh layout block keeps the height rule')
+assert.ok(zh.includes('**图片呈现（等比例放大到正文列宽）**'), 'zh layout block keeps the image-presentation rules')
+assert.ok(zh.includes('width:100%; height:auto'), 'zh image rules forbid hard-coded height')
 assert.ok(zh.includes('next = prev + size + gap'), 'zh geometry block keeps the layout-constant rule')
 assert.ok(zh.trimEnd().endsWith('- 一句话能说清的不配图。'), 'zh ends with the last red line')
 
@@ -32,6 +34,7 @@ const en = renderSection({ language: 'en' })
 assert.match(en, /^## Output style: dual-track \(text \+ visuals\)/, 'en title')
 assert.ok(en.includes('### Structure and order'), 'en block')
 assert.ok(en.includes('### Chart sizing and typography (hard limits; rework if violated)'), 'en layout block')
+assert.ok(en.includes('**Image presentation (scale up to the text column)**'), 'en image-presentation rules')
 assert.ok(en.includes('### Composition geometry: no overlaps, connectors stop on borders'), 'en geometry block')
 
 const appended = renderSection({ append: 'Use the team template.' })
