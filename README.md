@@ -23,25 +23,110 @@
 
 ## 安装
 
-这是一个带 `dsh.bundle.patch` 的普通包，装进 DeepSeek Harness 的 **profile** 即可。
+这个包只往系统提示词里注册一段文字，所以要装进 **profile**（DSH 的配置单元），而不是某个工作区。装一次，该 profile 下的所有会话、所有子代理都会看到这段契约；换工作区不受影响。
 
-1. 在 **Plugin Manager** 里用包规格 `github:DING0101001/dsh-dual-track-output` 安装（pnpm 的 git 规格），或直接写进 profile 的 `package.json`：
+```mermaid
+flowchart TD
+    A["① 确认 profile 目录与名称"] --> B{"② 选一种安装方式"}
+    B -->|"Plugin Manager"| C["填包规格，装完确认 bundles 里有包名"]
+    B -->|"手改 package.json"| D["写 dependencies 与 dsh.profile.bundles"] --> F["pnpm install"]
+    B -->|"命令行"| E["pnpm add 之后补 bundles 一行"]
+    C --> H["③ 重启 DSH 或刷新页面"]
+    D --> H
+    E --> H
+    F --> H
+    H --> I["④ 验证：版本 1.1.0、npm test、新会话复述小节"]
+    I --> J["生效（仅当前 profile）"]
+```
 
-   ```json
-   {
-     "dependencies": { "dsh-dual-track-output": "github:DING0101001/dsh-dual-track-output" },
-     "dsh": { "profile": { "bundles": ["dsh-dual-track-output"] } }
-   }
-   ```
+### 第 0 步：装之前确认三件事
 
-   安装依赖后重启，或让 profile 自动重载。
-2. 启用该行。bundle 的 patch 会插入 `dual-track-output` 一行并带上 `enabled: true`，profile 激活后立即生效。
+| 检查项 | 怎么确认 | 期望值 |
+|---|---|---|
+| DSH 版本 | 命令面板 → 关于，或 `dsh --version` | ≥ `0.2.0-rc.1` |
+| profile 目录 | 环境变量 `DSH_PROFILE_DIR`，或默认 `~/.dsh/profiles/desktop` | 目录里有 `package.json` 和 `cordis.patch.yml` |
+| 当前用的 profile | 启动 DSH 时选的 profile 名 | 例如 `desktop`；装到别的 profile 不会报错，但**不会生效** |
 
-这样安装时包会被**复制**进 profile 目录，因此与打开哪个工作区无关；该 profile 下的所有会话和子代理都能看到这段契约。
+Windows 下默认路径是 `C:\Users\<用户名>\.dsh\profiles\desktop`。
+
+### 第 1 步：安装（三种方式任选一种）
+
+**方式 A：Plugin Manager（最省事）**
+
+1. 打开 DSH → **Plugin Manager** → 安装插件包。
+2. 包规格填 `github:DING0101001/dsh-dual-track-output#v1.1.0`。`#v1.1.0` 是版本锁；想去掉锁定、跟随最新代码，就把 `#v1.1.0` 删掉。
+3. 装完确认包名 `dsh-dual-track-output` 已出现在当前 profile 的 `dsh.profile.bundles` 里（管理器通常会自动加；没加就照方式 B 手动补一行）。
+
+**方式 B：手改 profile 的 `package.json`**
+
+在 `<profile>/package.json` 里加两处——依赖，以及 bundles 清单：
+
+```json
+{
+  "dependencies": {
+    "dsh-dual-track-output": "github:DING0101001/dsh-dual-track-output#v1.1.0"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": ["dsh-dual-track-output"]
+    }
+  }
+}
+```
+
+然后在 profile 目录里装依赖：
+
+```bash
+pnpm install
+```
+
+**方式 C：命令行**
+
+```bash
+cd ~/.dsh/profiles/desktop        # Windows: cd %USERPROFILE%\.dsh\profiles\desktop
+pnpm add github:DING0101001/dsh-dual-track-output#v1.1.0
+```
+
+再把 `"dsh-dual-track-output"` 加进同目录 `package.json` 的 `dsh.profile.bundles`。
+
+### 第 2 步：让改动生效
+
+1. 改过 `package.json` 的，先跑 `pnpm install`；
+2. 重启 DSH（或刷新页面、让 profile 重载）；
+3. bundle 自带 `cordis.patch.yml`，会自动插入一行 `id: dual-track-output`、`enabled: true`——**不需要手动加行**；要改行为时，在 profile 的 `cordis.patch.yml` 里覆盖这一行（见「配置」）。
+
+这样安装的包是**复制**进 profile 目录的（不是软链），所以与打开哪个工作区无关。
+
+### 第 3 步：验证是否装好
+
+四条都通过就算成功：
+
+1. `node_modules/dsh-dual-track-output/package.json` 里 `"version": "1.1.0"`；
+2. 在该目录跑 `npm test`，输出 `render-check: ok`；
+3. 重启后新开会话，问它「你的系统提示词里关于输出风格的段落是什么？」——应能复述标题 `## 输出风格：文字 + 可视化双轨` 以及九个小节名（`结构与顺序`、`必须出图的场景`、…、`红线`）；
+4. 若没出现，按「常见问题」逐条排查。
+
+### 第 4 步：更新与卸载
+
+```bash
+pnpm update dsh-dual-track-output      # 更新到规格里的最新版本
+```
+
+卸载：从 `dsh.profile.bundles` 里删掉包名 → `pnpm remove dsh-dual-track-output` → 重启。只想临时关闭、保留安装，就在覆盖配置里设 `enabled: false`。
 
 ### 多个 profile 互相独立
 
-profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web`）都要各装一次。
+profile 之间互不影响：你用的每个 profile（例如 `desktop` 和 `web`）都要各装一次；在 `desktop` 装好，`web` 里看不到。
+
+### 常见问题
+
+| 现象 | 原因 | 处理 |
+|---|---|---|
+| 装完没反应 | 装到了别的 profile，或包名没进 `dsh.profile.bundles` | 用 `DSH_PROFILE_DIR` 确认目录，补上 bundle 名并重启 |
+| `npm test` 报错 | Node 版本过低 | 用 Node ≥ 20 |
+| `pnpm add` 卡住或超时 | 访问不到 github.com | 配代理，或设置 `git config --global http.proxy` |
+| 只想给某个项目用 | 本插件是 profile 级 | 给该 agent 的 preset 注册同名 `section` 覆盖（见「配置」中的 `section`） |
+| 想换版本 | 规格里带了 `#v1.1.0` | 改规格里的 tag 后 `pnpm update`；不带 tag 则跟随 `main` |
 
 ## 配置
 
@@ -77,13 +162,13 @@ profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web
 | `blocks.*` | `true` | 逐个开关九个规则块。 |
 | `append` | `''` | 追加在末尾的额外规定。 |
 
-## 验证
+## 离线自检
 
 ```bash
 npm test            # 离线渲染该段落，逐块检查内容与开关行为
 ```
 
-新开一个会话问它「你的系统提示词里关于输出风格的段落是什么」，它应能复述标题 `## 输出风格：文字 + 可视化双轨` 及九个小节名。也可以在命令面板里直接看系统提示词的拼装结果。
+它会断言九个小节都在、`layout` / `geometry` 能单独关闭、`append` 追加在最后，并且启用时只注册一条 `interpolate: false` 的段落。装进 profile 后的在线验证见「安装 · 第 3 步」。
 
 ## 实现要点
 
