@@ -51,11 +51,11 @@ profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web
 - id: dual-track-output
   name: dsh-dual-track-output
   config:
-    enabled: true          # false 即完全移除
+    enabled: true          # false 即不启用
     language: zh           # zh | en
     order: 9000            # 提示词顺序；官方环境事实从 10000 起
     section: output:dual-track
-    append: ''             # 追加到最后一条启用块之后的额外条款
+    append: ''             # 追加到最后一条启用块之后的额外规定
     blocks:
       structure: true
       triggers: true
@@ -70,12 +70,12 @@ profile 之间互相独立：你用的每个 profile（例如 `desktop` 和 `web
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
-| `enabled` | `true` | 设为 false 时插件不注册任何内容。 |
+| `enabled` | `true` | 设为 false 时插件不启用。 |
 | `language` | `zh` | 文本包，`zh` 或 `en`。 |
 | `order` | `9000` | 段落顺序。官方行为指导在 10000 以下，环境事实在 10000 以上。 |
 | `section` | `output:dual-track` | 注册的段落名；同名的 scoped 段落可对单个 agent 覆盖它。 |
 | `blocks.*` | `true` | 逐个开关九个规则块。 |
-| `append` | `''` | 追加在末尾的团队自定义条款。 |
+| `append` | `''` | 追加在末尾的额外规定。 |
 
 ## 验证
 
