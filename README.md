@@ -25,20 +25,6 @@
 
 这个包只往系统提示词里注册一段文字，所以要装进 **profile**（DSH 的配置单元），而不是某个工作区。
 
-```mermaid
-flowchart TD
-    A["① 确认 profile 目录与名称"] --> B{"② 选一种安装方式"}
-    B -->|"Plugin Manager"| C["填包规格，装完确认 bundles 里有包名"]
-    B -->|"手改 package.json"| D["写 dependencies 与 dsh.profile.bundles"] --> F["pnpm install"]
-    B -->|"命令行"| E["pnpm add 之后补 bundles 一行"]
-    C --> H["③ 重启 DSH 或刷新页面"]
-    D --> H
-    E --> H
-    F --> H
-    H --> I["④ 验证：版本 1.1.0、npm test、新会话复述小节"]
-    I --> J["生效（仅当前 profile）"]
-```
-
 ### 第 0 步：装之前确认三件事
 
 | 检查项 | 怎么确认 | 期望值 |
