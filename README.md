@@ -54,7 +54,7 @@ Windows 下默认路径是 `C:\Users\<用户名>\.dsh\profiles\desktop`。
 **方式 A：Plugin Manager（最省事）**
 
 1. 打开 DSH → **Plugin Manager** → 安装插件包。
-2. 包规格填 `github:DING0101001/dsh-dual-track-output#v1.1.0`。`#v1.1.0` 是版本锁；想去掉锁定、跟随最新代码，就把 `#v1.1.0` 删掉。
+2. 包规格填 `github:DING0101001/dsh-dual-track-output`。
 3. 装完确认包名 `dsh-dual-track-output` 已出现在当前 profile 的 `dsh.profile.bundles` 里（管理器通常会自动加；没加就照方式 B 手动补一行）。
 
 **方式 B：手改 profile 的 `package.json`**
@@ -112,7 +112,7 @@ pnpm add github:DING0101001/dsh-dual-track-output#v1.1.0
 pnpm update dsh-dual-track-output      # 更新到规格里的最新版本
 ```
 
-卸载：从 `dsh.profile.bundles` 里删掉包名 → `pnpm remove dsh-dual-track-output` → 重启。只想临时关闭、保留安装，就在覆盖配置里设 `enabled: false`。
+卸载：从 `dsh.profile.bundles` 里删掉包名 → `pnpm remove dsh-dual-track-output` → 重启。只想临时关闭、保留安装，就在覆盖配置里设置 `enabled: false`。
 
 ### 多个 profile 互相独立
 
@@ -161,14 +161,6 @@ profile 之间互不影响：你用的每个 profile（例如 `desktop` 和 `web
 | `section` | `output:dual-track` | 注册的段落名；同名的 scoped 段落可对单个 agent 覆盖它。 |
 | `blocks.*` | `true` | 逐个开关九个规则块。 |
 | `append` | `''` | 追加在末尾的额外规定。 |
-
-## 离线自检
-
-```bash
-npm test            # 离线渲染该段落，逐块检查内容与开关行为
-```
-
-它会断言九个小节都在、`layout` / `geometry` 能单独关闭、`append` 追加在最后，并且启用时只注册一条 `interpolate: false` 的段落。装进 profile 后的在线验证见「安装 · 第 3 步」。
 
 ## 实现要点
 
