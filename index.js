@@ -29,7 +29,7 @@ const RULES = {
 1. 结论先行：开头 3–5 句给出核心结论，再展开分点论述。
 2. 文字负责结论、推理与解释；可视化负责承载结构、对比、流程与数据，二者互补而不重复。
 3. 需要配图时，图放在相关论述之后，按图1、图2…编号，正文用「（见图1）」引用。
-4. 每张图后用 1–2 句说明读图要点，并且只讲这张图带来的新增信息。
+4. 每张图后用 1–2 句说明读图要点，只讲这张图带来的新增信息；说明另起一段，与图之间空一行（见「图表尺寸与图文排版」里的图题规则）。
 5. 结尾给出小结或下一步行动建议。`,
       triggers: `### 必须出图的场景（命中其一即出图）
 - 多个对象、多个方案的横向对比，或优缺点矩阵。
@@ -41,14 +41,15 @@ const RULES = {
       charts: `### 图表选型
 - 数据比较 → 柱状图/条形图；趋势变化 → 折线图；构成占比 → 饼图/环形图；分布 → 散点图/直方图。
 - 流程算法 → 流程图；层级架构 → 框图；分类归属 → 思维导图/树状图；方案决策 → 矩阵表。
-- 简单一一对应 → Markdown 表格；复杂关系 → 专用结构图。`,
+- 简单一一对应 → Markdown 表格；复杂关系 → 专用结构图。
+- Markdown 表格只承载文字与数据，**禁止**把图片放进表格单元格（图会被挤成半行）。`,
       figure: `### 每张图的硬性要求
 - 图题写在图的下方，单独成段；不写在图上方，也不烧进图片里。
 - 图例、坐标轴与口径说明齐全；宽度自适应，图中数据必须与正文一致。
 - 没有真实数据时显式标注「示意/假设数据」，禁止编造精确数值。`,
       layout: `### 图表尺寸与图文排版（硬性指标，违反即返工）
 **尺寸底线**
-1. 每个图表容器占满内容区整行宽度，禁止放进多列卡片栅格；两图并排时每张渲染宽度须 ≥520px，不足则改为上下单列。
+1. 每个图表容器占满内容区整行宽度，禁止放进多列卡片栅格；并排只允许出现在 HTML 交付里，且每张 ≥520px，正文 Markdown 一律单列（见「图与图题的排版」）。
 2. 内容区宽度 1100–1280px（窄屏自适应），图表占满整个内容区，不得再套一层窄容器。
 3. 图表高度 min(60vh, 520px)，且不低于 360px；纵轴类别 >6 项时按每项 ≥48px 加高。
 4. 图表必须由 ECharts 渲染，禁止用手写 SVG 或小 canvas 充当数据图表。
@@ -96,6 +97,7 @@ const RULES = {
       redlines: `### 红线
 - 禁止无信息增量的装饰图，一图只讲一个主题。
 - 禁止图表与结论矛盾，禁止为凑格式堆砌无关图，禁止数据造假。
+- 图题跑到图的右侧、挤到图下，或图片只占半行，一律返工重排。
 - 一句话能说清的不配图。`,
     },
   },
@@ -106,7 +108,7 @@ const RULES = {
 1. Lead with the conclusion: open with 3–5 sentences of findings, then the supporting points.
 2. Text carries conclusions, reasoning and explanation; visuals carry structure, comparison, process and data. They complement each other and never repeat.
 3. When a visual is needed, place it after the discussion it belongs to, number it (Figure 1, Figure 2, …), and refer to it in the text as "(see Figure 1)".
-4. Follow each visual with 1–2 sentences on what to read in it, covering only what that visual adds.
+4. Follow each visual with 1–2 sentences on what to read in it, covering only what that visual adds; the note starts its own paragraph, one blank line below the figure (see the caption rules in Chart sizing and typography).
 5. Close with a summary or the next actions.`,
       triggers: `### Visuals are required when any of these applies
 - Comparing several objects or options, or a pros/cons matrix.
@@ -118,14 +120,15 @@ const RULES = {
       charts: `### Choosing the form
 - Comparison → bar chart; trend → line chart; share → pie or donut; distribution → scatter or histogram.
 - Process or algorithm → flowchart; hierarchy or architecture → block diagram; taxonomy → mind map or tree; option trade-offs → matrix table.
-- Simple one-to-one mapping → Markdown table; complex relationships → a purpose-built structure diagram.`,
+- Simple one-to-one mapping → Markdown table; complex relationships → a purpose-built structure diagram.
+- A Markdown table carries text and data only; never put images in table cells (they get squeezed to half a row).`,
       figure: `### Every visual must
 - Carry its title below the figure, as its own paragraph — never above it and never baked into the image.
 - Ship legend, axes and a stated basis or measure; be width-responsive, with figures that match the numbers in the text.
 - Mark assumed or illustrative data explicitly when no real data exists; never invent precise values.`,
       layout: `### Chart sizing and typography (hard limits; rework if violated)
 **Size floor**
-1. Every chart container spans the full content row; never place it inside a multi-column card grid. Two charts side by side must each render ≥520px wide, otherwise stack them in one column.
+1. Every chart container spans the full content row; never place it inside a multi-column card grid. Side by side is allowed only in HTML delivery and only at ≥520px each; Markdown body copy stays single-column (see the caption rules below).
 2. The content area is 1100–1280px wide (fluid on narrow screens); charts fill the whole content area, with no extra narrow wrapper.
 3. Chart height is min(60vh, 520px) and never below 360px; past 6 axis categories, grow by at least 48px per category.
 4. Data charts must be rendered by ECharts; hand-written SVG or small canvases are not acceptable.
@@ -173,6 +176,7 @@ const RULES = {
       redlines: `### Never
 - Add decoration with no information gain; one visual carries one topic.
 - Contradict the conclusion, pad the answer with unrelated visuals, or fabricate data.
+- A caption that lands beside or below the image, or an image filling only half the row, is rework — lay it out again.
 - Draw a visual for something one sentence already explains.`,
     },
   },

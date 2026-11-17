@@ -24,6 +24,9 @@ assert.ok(zh.includes('**图与图题的排版（违反即返工）**'), 'zh lay
 assert.ok(zh.includes('图题写在图的下方'), 'zh figure block puts the title below the figure')
 assert.ok(zh.includes('禁止用表格把两张图并排'), 'zh rules forbid side-by-side figures in tables')
 assert.ok(zh.includes('图片必须独占一段'), 'zh rules require a figure to own its paragraph')
+assert.ok(zh.includes('把图片放进表格单元格'), 'zh rules forbid images inside table cells')
+assert.ok(zh.includes('一律返工重排'), 'zh red line rejects a caption beside the figure')
+assert.ok(zh.includes('并排只允许出现在 HTML 交付里'), 'zh rules keep side-by-side for HTML only')
 assert.ok(zh.includes('next = prev + size + gap'), 'zh geometry block keeps the layout-constant rule')
 assert.ok(zh.trimEnd().endsWith('- 一句话能说清的不配图。'), 'zh ends with the last red line')
 
@@ -41,6 +44,8 @@ assert.ok(en.includes('### Chart sizing and typography (hard limits; rework if v
 assert.ok(en.includes('**Image presentation (scale up to the text column)**'), 'en image-presentation rules')
 assert.ok(en.includes('**Figure and caption layout (rework if violated)**'), 'en caption-placement rules')
 assert.ok(en.includes('never above it and never baked into the image'), 'en figure block puts the title below')
+assert.ok(en.includes('never put images in table cells'), 'en rules forbid images inside table cells')
+assert.ok(en.includes('is rework — lay it out again'), 'en red line rejects a caption beside the figure')
 assert.ok(en.includes('### Composition geometry: no overlaps, connectors stop on borders'), 'en geometry block')
 
 const appended = renderSection({ append: 'Use the team template.' })
