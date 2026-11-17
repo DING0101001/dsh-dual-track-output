@@ -43,8 +43,8 @@ const RULES = {
 - 流程算法 → 流程图；层级架构 → 框图；分类归属 → 思维导图/树状图；方案决策 → 矩阵表。
 - 简单一一对应 → Markdown 表格；复杂关系 → 专用结构图。`,
       figure: `### 每张图的硬性要求
-- 图题在上，图例、坐标轴与口径说明齐全。
-- 宽度自适应；图中数据必须与正文一致。
+- 图题写在图的下方，单独成段；不写在图上方，也不烧进图片里。
+- 图例、坐标轴与口径说明齐全；宽度自适应，图中数据必须与正文一致。
 - 没有真实数据时显式标注「示意/假设数据」，禁止编造精确数值。`,
       layout: `### 图表尺寸与图文排版（硬性指标，违反即返工）
 **尺寸底线**
@@ -72,7 +72,13 @@ const RULES = {
 16. 图在正文里按容器宽度 100% 显示，左右边缘与正文文字对齐；禁止设更小的 max-width、禁止居中留白、禁止左右再垫内边距。
 17. 高度按原始宽高比自动计算（height: auto），禁止写死 height、禁止 object-fit: cover 裁切、禁止单向拉伸——只允许整体等比例缩放。
 18. 位图像素按目标显示宽度的 2 倍导出（列宽 1280px 就出 ≥2560px 宽），放大后不糊；HTML 里写 width:100%; height:auto; max-width:100%。
-19. 图内字号、线宽、间距随整体缩放同步变化：放大是"把整张图放大"，不是只把画布加宽。`,
+19. 图内字号、线宽、间距随整体缩放同步变化：放大是"把整张图放大"，不是只把画布加宽。
+
+**图与图题的排版（违反即返工）**
+20. 图题与读图要点一律写在图的**下方**，单独成段；图与图题之间空一行，不写在图上方、不烧进图片里。
+21. 图片必须独占一段：图前、图后各留一个空行。禁止图片与说明文字同段——同段会把文字挤到图的右侧或下方，图也占不满整行。
+22. 禁止用表格把两张图并排（单元格里的图占不满整行，窄屏会一张在右、一张在下）；要对照就上下单列，各自独立成段。
+23. 多图按图1、图2…逐段排开，一段一图；HTML 里用 figure + figcaption，figcaption 放在 img 之后。`,
       geometry: `### 构图几何：元素不重叠，连线落在边框上
 1. 同类元素只给「尺寸 + 最小间距」两个常量，位置循环累加推出（next = prev + size + gap），禁止逐个手写坐标——重叠就藏在某个手写的数字里。
 2. 生成后立即自检：任意两个元素间距 ≥ 设定值、文本宽度 ≤ 容器宽度；把检查写成断言或脚本，失败就报错重排，不要靠肉眼看图。
@@ -114,8 +120,8 @@ const RULES = {
 - Process or algorithm → flowchart; hierarchy or architecture → block diagram; taxonomy → mind map or tree; option trade-offs → matrix table.
 - Simple one-to-one mapping → Markdown table; complex relationships → a purpose-built structure diagram.`,
       figure: `### Every visual must
-- Carry its title above, plus legend, axes and a stated basis or measure.
-- Be width-responsive, with figures that match the numbers in the text.
+- Carry its title below the figure, as its own paragraph — never above it and never baked into the image.
+- Ship legend, axes and a stated basis or measure; be width-responsive, with figures that match the numbers in the text.
 - Mark assumed or illustrative data explicitly when no real data exists; never invent precise values.`,
       layout: `### Chart sizing and typography (hard limits; rework if violated)
 **Size floor**
@@ -143,7 +149,13 @@ const RULES = {
 16. In the body a figure renders at 100% of the container width, with its edges aligned to the text; no smaller max-width, no centring with empty gutters, no extra horizontal padding.
 17. Height follows the intrinsic aspect ratio (height: auto): never hard-code height, never crop with object-fit: cover, never stretch one axis — only uniform, proportional scaling.
 18. Export bitmaps at 2× the target display width (a 1280px column needs ≥2560px of pixels) so scaling up stays sharp; in HTML write width:100%; height:auto; max-width:100%.
-19. Type size, stroke width and spacing scale with the figure as a whole: enlarging means scaling the whole figure, not just widening the canvas.`,
+19. Type size, stroke width and spacing scale with the figure as a whole: enlarging means scaling the whole figure, not just widening the canvas.
+
+**Figure and caption layout (rework if violated)**
+20. Put the caption and the reading note below the figure, each as its own paragraph, with a blank line between figure and caption. Never above the figure, never baked into the image.
+21. A figure owns its paragraph: one blank line before and after. Never share a paragraph with prose — the text then sits beside or under the image, and the image no longer spans the row.
+22. Never place two figures side by side in table cells (cells cannot span the row, and on narrow screens one lands right and one below). To compare, stack them in one column, each its own paragraph.
+23. Order multiple figures as Figure 1, Figure 2, … one paragraph each; in HTML use figure + figcaption, with figcaption after the img.`,
       geometry: `### Composition geometry: no overlaps, connectors stop on borders
 1. Repeated elements get two constants only — size and minimum gap; positions follow next = prev + size + gap. Never hand-write every coordinate: an overlap hides inside one of those typed numbers.
 2. Self-check right after generation: minimum gap between any two elements ≥ the constant, and text width ≤ container width. Encode it as an assertion or script that fails loudly and re-lays out — do not rely on eyeballing the render.
