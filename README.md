@@ -50,7 +50,7 @@ Windows 下默认路径是 `C:\Users\<用户名>\.dsh\profiles\desktop`。
 ```json
 {
   "dependencies": {
-    "dsh-dual-track-output": "github:DING0101001/dsh-dual-track-output#v1.1.0"
+    "dsh-dual-track-output": "github:DING0101001/dsh-dual-track-output#v1.2.0"
   },
   "dsh": {
     "profile": {
@@ -70,7 +70,7 @@ pnpm install
 
 ```bash
 cd ~/.dsh/profiles/desktop        # Windows: cd %USERPROFILE%\.dsh\profiles\desktop
-pnpm add github:DING0101001/dsh-dual-track-output#v1.1.0
+pnpm add github:DING0101001/dsh-dual-track-output#v1.2.0
 ```
 
 再把 `"dsh-dual-track-output"` 加进同目录 `package.json` 的 `dsh.profile.bundles`。
@@ -87,7 +87,7 @@ pnpm add github:DING0101001/dsh-dual-track-output#v1.1.0
 
 四条都通过就算成功：
 
-1. `node_modules/dsh-dual-track-output/package.json` 里 `"version": "1.1.0"`；
+1. `node_modules/dsh-dual-track-output/package.json` 里 `"version": "1.2.0"`；
 2. 在该目录跑 `npm test`，输出 `render-check: ok`；
 3. 重启后新开会话，问它「你的系统提示词里关于输出风格的段落是什么？」——应能复述标题 `## 输出风格：文字 + 可视化双轨` 以及九个小节名（`结构与顺序`、`必须出图的场景`、…、`红线`）；
 4. 若没出现，按「常见问题」逐条排查。
@@ -112,7 +112,7 @@ profile 之间互不影响：你用的每个 profile（例如 `desktop` 和 `web
 | `npm test` 报错 | Node 版本过低 | 用 Node ≥ 20 |
 | `pnpm add` 卡住或超时 | 访问不到 github.com | 配代理，或设置 `git config --global http.proxy` |
 | 只想给某个项目用 | 本插件是 profile 级 | 给该 agent 的 preset 注册同名 `section` 覆盖（见「配置」中的 `section`） |
-| 想换版本 | 规格里带了 `#v1.1.0` | 改规格里的 tag 后 `pnpm update`；不带 tag 则跟随 `main` |
+| 想换版本 | 规格里带了 `#v1.2.0` | 改规格里的 tag 后 `pnpm update`；不带 tag 则跟随 `main` |
 
 ## 配置
 
@@ -161,6 +161,10 @@ profile 之间互不影响：你用的每个 profile（例如 `desktop` 和 `web
 ## 卸载
 
 删掉该行（或设 `enabled: false`），从 `dsh.profile.bundles` 里去掉包名，再移除依赖即可。
+
+## 更新日志
+
+- **v1.2.0**：修复了图表排版错误和图片显示不全的问题。
 
 ## 许可
 
