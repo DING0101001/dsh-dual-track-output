@@ -9,7 +9,7 @@ for (const heading of [
   '### 图表选型',
   '### 每张图的硬性要求',
   '### 图表尺寸与图文排版（硬性指标，违反即返工）',
-  '### 构图几何：元素不重叠，连线落在边框上',
+  '### 构图几何：不重叠、不出界，连线落在边框上',
   '### HTML 交付（用户要文件，或图需要交互时）',
   '### 降级（环境不能渲染图表时）',
   '### 红线',
@@ -28,6 +28,9 @@ assert.ok(zh.includes('把图片放进表格单元格'), 'zh rules forbid images
 assert.ok(zh.includes('一律返工重排'), 'zh red line rejects a caption beside the figure')
 assert.ok(zh.includes('并排只允许出现在 HTML 交付里'), 'zh rules keep side-by-side for HTML only')
 assert.ok(zh.includes('next = prev + size + gap'), 'zh geometry block keeps the layout-constant rule')
+assert.ok(zh.includes('完整外延'), 'zh self-check covers the full drawn extent')
+assert.ok(zh.includes('节点中心包围盒'), 'zh geometry warns about ECharts center-only fit')
+assert.ok(zh.includes('被画布或容器裁切'), 'zh red line rejects clipped elements')
 assert.ok(zh.trimEnd().endsWith('- 一句话能说清的不配图。'), 'zh ends with the last red line')
 
 const trimmed = renderSection({ blocks: { html: false, fallback: false, layout: false, geometry: false } })
@@ -46,7 +49,10 @@ assert.ok(en.includes('**Figure and caption layout (rework if violated)**'), 'en
 assert.ok(en.includes('never above it and never baked into the image'), 'en figure block puts the title below')
 assert.ok(en.includes('never put images in table cells'), 'en rules forbid images inside table cells')
 assert.ok(en.includes('is rework — lay it out again'), 'en red line rejects a caption beside the figure')
-assert.ok(en.includes('### Composition geometry: no overlaps, connectors stop on borders'), 'en geometry block')
+assert.ok(en.includes('### Composition geometry: no overlaps, no overflow, connectors stop on borders'), 'en geometry block')
+assert.ok(en.includes('full drawn extent'), 'en self-check covers the full drawn extent')
+assert.ok(en.includes('node CENTERS'), 'en geometry warns about ECharts center-only fit')
+assert.ok(en.includes('clipped by the canvas or container'), 'en red line rejects clipped elements')
 
 const appended = renderSection({ append: 'Use the team template.' })
 assert.ok(appended.trimEnd().endsWith('Use the team template.'), 'append goes last')

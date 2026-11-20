@@ -80,13 +80,14 @@ const RULES = {
 21. 图片必须独占一段：图前、图后各留一个空行。禁止图片与说明文字同段——同段会把文字挤到图的右侧或下方，图也占不满整行。
 22. 禁止用表格把两张图并排（单元格里的图占不满整行，窄屏会一张在右、一张在下）；要对照就上下单列，各自独立成段。
 23. 多图按图1、图2…逐段排开，一段一图；HTML 里用 figure + figcaption，figcaption 放在 img 之后。`,
-      geometry: `### 构图几何：元素不重叠，连线落在边框上
+      geometry: `### 构图几何：不重叠、不出界，连线落在边框上
 1. 同类元素只给「尺寸 + 最小间距」两个常量，位置循环累加推出（next = prev + size + gap），禁止逐个手写坐标——重叠就藏在某个手写的数字里。
-2. 生成后立即自检：任意两个元素间距 ≥ 设定值、文本宽度 ≤ 容器宽度；把检查写成断言或脚本，失败就报错重排，不要靠肉眼看图。
+2. 生成后立即自检：任意两个元素间距 ≥ 设定值、文本宽度 ≤ 容器宽度、所有元素的完整外延（含符号半宽、箭头、标签）落在画布/容器内；把检查写成断言或脚本，失败就报错重排，不要靠肉眼看图。
 3. 连线终点由目标框的 x/y/w/h 反推：从左侧进入取 x，从上/下进入取 y；多路汇入同一面时入点错开（1/6、1/2、5/6），禁止几条线共用一点，禁止终点落进框内。
 4. 连线不得压过边框和文字：转折放在框外，箭头尖端停在边界上。
 5. 分组底色、图例、编号等第二层结构由第一层元素算出（包围盒 + 间隙中点），不要另写一套坐标。
-6. 文本先量后放：字号与文案定下后先估宽度，超宽就换行、缩字号或改短，不允许溢出压到相邻元素。`,
+6. 文本先量后放：字号与文案定下后先估宽度，超宽就换行、缩字号或改短，不允许溢出压到相邻元素。
+7. 适配与留白按完整绘制外延算，不按中心/锚点算：ECharts graph 的 left/right/top/bottom 只适配「节点中心包围盒」，每个节点还会向四周伸出半个 symbolSize（乘适配缩放）——四边必须再预留这段外延，否则两端节点被画布裁掉；箭头、悬挑标签、图例同样计入外延。min-width 加横向滚动救不了画布内裁切。`,
       html: `### HTML 交付（用户要文件，或图需要交互时）
 - 单个自包含 HTML：内联 CSS/JS，浏览器直接打开；图表用 ECharts 等成熟库，CDN 引入。
 - 一屏一图，图题在上；主色不超过 3 种，深色文字浅底，中文排版可读。
@@ -98,6 +99,7 @@ const RULES = {
 - 禁止无信息增量的装饰图，一图只讲一个主题。
 - 禁止图表与结论矛盾，禁止为凑格式堆砌无关图，禁止数据造假。
 - 图题跑到图的右侧、挤到图下，或图片只占半行，一律返工重排。
+- 图内元素被画布或容器裁切（两端显示不全），一律返工重排。
 - 一句话能说清的不配图。`,
     },
   },
@@ -159,13 +161,14 @@ const RULES = {
 21. A figure owns its paragraph: one blank line before and after. Never share a paragraph with prose — the text then sits beside or under the image, and the image no longer spans the row.
 22. Never place two figures side by side in table cells (cells cannot span the row, and on narrow screens one lands right and one below). To compare, stack them in one column, each its own paragraph.
 23. Order multiple figures as Figure 1, Figure 2, … one paragraph each; in HTML use figure + figcaption, with figcaption after the img.`,
-      geometry: `### Composition geometry: no overlaps, connectors stop on borders
+      geometry: `### Composition geometry: no overlaps, no overflow, connectors stop on borders
 1. Repeated elements get two constants only — size and minimum gap; positions follow next = prev + size + gap. Never hand-write every coordinate: an overlap hides inside one of those typed numbers.
-2. Self-check right after generation: minimum gap between any two elements ≥ the constant, and text width ≤ container width. Encode it as an assertion or script that fails loudly and re-lays out — do not rely on eyeballing the render.
+2. Self-check right after generation: minimum gap between any two elements ≥ the constant, text width ≤ container width, and every element's full drawn extent (symbol half-size, arrowheads, labels included) stays inside the canvas/container. Encode it as an assertion or script that fails loudly and re-lays out — do not rely on eyeballing the render.
 3. Derive connector endpoints from the target box's x/y/w/h: enter on the left → use x; enter from the top or bottom → use y; stagger entry points (1/6, 1/2, 5/6) when several connectors share one side. Never let several arrows land on one point, and never let an endpoint fall inside the box.
 4. Connectors must not cross a border or text: put the elbow outside the box and stop the arrowhead on the border.
 5. Second-layer structure (group backgrounds, legends, numbering) is computed from first-layer elements (bounding box plus gap midpoints), never from a second set of coordinates.
-6. Measure text before placing it: with the size and copy fixed, estimate the width first; if it overflows, wrap, shrink or shorten — never let it bleed into a neighbour.`,
+6. Measure text before placing it: with the size and copy fixed, estimate the width first; if it overflows, wrap, shrink or shorten — never let it bleed into a neighbour.
+7. Compute fit and margins from the full drawn extent, never from centers/anchors: ECharts graph left/right/top/bottom only fits the bounding box of node CENTERS, and every node still protrudes half a symbolSize (times the fit scale) on each side — reserve that overhang on all four sides or the end nodes get clipped by the canvas; arrowheads, overhanging labels and legends count toward the extent too. min-width plus horizontal scrolling cannot recover pixels clipped inside the canvas.`,
       html: `### HTML delivery (the user wants a file, or the visual must be interactive)
 - One self-contained HTML file: inline CSS/JS, opens directly in a browser; charts from a mature library such as ECharts over CDN.
 - One visual per screen, title above; at most three main colors, dark text on a light background, readable CJK typography.
@@ -177,6 +180,7 @@ const RULES = {
 - Add decoration with no information gain; one visual carries one topic.
 - Contradict the conclusion, pad the answer with unrelated visuals, or fabricate data.
 - A caption that lands beside or below the image, or an image filling only half the row, is rework — lay it out again.
+- An element clipped by the canvas or container (ends cut off) is rework — lay it out again.
 - Draw a visual for something one sentence already explains.`,
     },
   },
